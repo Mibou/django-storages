@@ -58,6 +58,10 @@ To allow ``django-admin.py`` collectstatic to automatically put your static file
 
     STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
+``AWS_S3_NUMEROUS_FILES`` (optional)
+
+If you have numerous files in your bucket, some simple functions as `exists` might end up being very slow as it would first check across all the entries. This function can even take several minutes if you have hundred thousand files. This parameter set to `True` speeds up this function.
+
 Fields
 ------
 

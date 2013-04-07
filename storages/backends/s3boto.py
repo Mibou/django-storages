@@ -224,6 +224,7 @@ class S3BotoStorage(Storage):
     custom_domain = setting('AWS_S3_CUSTOM_DOMAIN')
     calling_format = setting('AWS_S3_CALLING_FORMAT', SubdomainCallingFormat())
     secure_urls = setting('AWS_S3_SECURE_URLS', True)
+    numerous_files_bucket = setting('AWS_S3_NUMEROUS_FILES', False)
     file_name_charset = setting('AWS_S3_FILE_NAME_CHARSET', 'utf-8')
     gzip = setting('AWS_IS_GZIPPED', False)
     preload_metadata = setting('AWS_PRELOAD_METADATA', False)
@@ -408,8 +409,9 @@ class S3BotoStorage(Storage):
 
     def exists(self, name):
         name = self._normalize_name(self._clean_name(name))
-        if self.entries:
-            return name in self.entries
+        if not self.numerous_files_bucket:
+            if self.entries:
+                return name in self.entries
         k = self.bucket.new_key(self._encode_name(name))
         return k.exists()
 
